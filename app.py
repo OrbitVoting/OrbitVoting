@@ -1,10 +1,12 @@
 from main import central
 import time
 
+sleepDuration = 2 #Duration between votecounts, in hours
+
 while(True):
     print("Process Began!")
 
     central()
     print("Process finished.")
-    time.sleep(3600*2)
-    print("Good!")
+    print("Sleeping " + sleepDuration + " hours.")
+    time.sleep(sleepDuration * 3600)
