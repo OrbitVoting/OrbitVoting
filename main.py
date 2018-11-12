@@ -1,8 +1,5 @@
 def central():
 
-
-
-
     from googleapiclient.discovery import build
     from httplib2 import Http
     from oauth2client import file, client, tools
@@ -18,6 +15,8 @@ def central():
     from datetime import datetime
     from pytz import timezone
     import pytz
+
+    SPREADSHEET_ID = "1VXNu_zrOsuoRPmF72ldW_A17xlu3r3XyFaRsLd_O8HY"
 
     #Find the curent file location/chdir to current location
     directory = abspath(getsourcefile(lambda:0))
@@ -38,8 +37,7 @@ def central():
     service = build('sheets', 'v4', http=creds.authorize(Http()))
 
     # Call the Sheets API
-    #SPREADSHEET_ID = '1vhJFtej4SOBr3SA6fAi9-MS0fHPXyFU12OAS7dkCa78' #original
-    SPREADSHEET_ID = "1VXNu_zrOsuoRPmF72ldW_A17xlu3r3XyFaRsLd_O8HY"
+
     RANGE_NAME = 'Sheet1!I2:L'
 
     result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
