@@ -9,6 +9,6 @@ while(x < y): #Loops over a set number of times, every set number of hours
 
     central()
     print("Process finished.")
-    print("Sleeping " + sleepDuration + " hours.")
+    
     time.sleep(sleepDuration * 3600)
     x = x+1

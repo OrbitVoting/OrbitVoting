@@ -5,14 +5,14 @@ def calculateVC(page1, page2):
     from selenium.webdriver.chrome.options import Options
     from selenium.common.exceptions import NoSuchElementException
 
+    #General Modules
+    import time
+    import datetime
+
     #os Modules
     import os
     from inspect import getsourcefile
     from os.path import abspath
-
-    #General Modules
-    import time
-    import datetime
 
     #Find the curent file location/chdir to current location
     directory = abspath(getsourcefile(lambda:0))
@@ -24,6 +24,8 @@ def calculateVC(page1, page2):
     findQuotes = True
     newtext = "Quote not found?"
     votecount = {}
+
+    #-------------------------------------------------------------------------------------------
     pageURL = "https://hypixel.net/threads/hypixel-mini-mafia-iii-logical-fallacies-edition-day-1.1857318/page-"
 
     #THE ABOVE URL MUST BE SET TO BE YOUR DESIRED THREAD, MINUS THE LAST LITTLE PAGE NUMBER.
