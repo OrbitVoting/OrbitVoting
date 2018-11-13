@@ -26,7 +26,15 @@ def calculateVC(page1, page2):
     votecount = {}
 
     #-------------------------------------------------------------------------------------------
-    pageURL = "https://hypixel.net/threads/hypixel-mini-mafia-iii-logical-fallacies-edition-day-1.1857318/page-"
+    f = open("settings.txt", "r")
+
+    settings = f.read()
+
+    pageURL = settings.splitlines()[2]
+
+    f.close()
+
+    print("Page URL: " + pageURL)
 
     #THE ABOVE URL MUST BE SET TO BE YOUR DESIRED THREAD, MINUS THE LAST LITTLE PAGE NUMBER.
     #ex. https://hypixel.net/whatever/page-3 becomes https://hypixel.net/whatever/page-
@@ -73,7 +81,7 @@ def calculateVC(page1, page2):
 
 
             if findMessages == True:
-                text = ((el.text).encode('utf-8'))
+                text = str((el.text).encode('utf-8'))
                 print("Found text.")
 
                 i2 = 1
@@ -98,15 +106,16 @@ def calculateVC(page1, page2):
 
                     if findQuotes == True:
                         foundQuotes = True #remove quotes
-                        print("Found Quote---")
-                        quote = ((el.text).encode('utf-8'))
+                        print("Found Quote---------")
 
-                        text = str(text)
-                        quote = str(quote)
+                        quote = str(((el.text).encode('utf-8')))
                         quote = quote[2:((len(quote))-1)]
-                        #print(text)
-                        #print(quote)
-                        newtext = text.replace(quote, "")
+                        quote = quote.replace("[vote]", "redacted")
+                        quote = quote.replace("[unvote]", "redacted")
+                        print(quote)
+
+                        newtext = text.replace(quote, "QUOTE")
+
                         text = newtext
 
                         #print(text)
@@ -123,11 +132,14 @@ def calculateVC(page1, page2):
                 x = newtext.rfind("[vote]")
 
                 if x > 0:
+
+                    print("FOUND VOTE!---------------------")
+
                     tag1 = newtext.rfind("[vote]")
                     tag2 = newtext.rfind("[/vote]")
+                    vote = (newtext[(tag1+6):(tag2)])
+                    if(tag1 > 0 and tag2 > 0 and ((vote.replace(" ", "") != ""))):
 
-                    if(tag1 > 0 and tag2 > 0):
-                        vote = (newtext[(tag1+6):(tag2)])
                         voter = (newtext[2:(newtext.find("\\"))])
 
                         votecount[voter] = vote.replace(" ", "")

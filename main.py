@@ -4,10 +4,6 @@ def central():
     from httplib2 import Http
     from oauth2client import file, client, tools
 
-    import os
-    from inspect import getsourcefile
-    from os.path import abspath
-    import smtplib
     from votecount import calculateVC
     import time
     import datetime
@@ -16,8 +12,20 @@ def central():
     from pytz import timezone
     import pytz
 
-    SPREADSHEET_ID = "1VXNu_zrOsuoRPmF72ldW_A17xlu3r3XyFaRsLd_O8HY"
+#    SPREADSHEET_ID = "1VXNu_zrOsuoRPmF72ldW_A17xlu3r3XyFaRsLd_O8HY"
 
+    f = open("settings.txt", "r")
+
+    settings = f.read()
+
+    SPREADSHEET_ID = settings.splitlines()[1]
+
+    f.close()
+    print("Spreadsheet Id: " + SPREADSHEET_ID)
+
+    import os
+    from inspect import getsourcefile
+    from os.path import abspath
     #Find the curent file location/chdir to current location
     directory = abspath(getsourcefile(lambda:0))
     newDirectory = directory[:(directory.rfind("\\")+1)]
@@ -25,7 +33,7 @@ def central():
 
 
     # If modifying these scopes, delete the file token.json.
-    SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
+    SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.profile'
 
     # The ID and range of a sample spreadsheet.
 
@@ -36,9 +44,11 @@ def central():
         creds = tools.run_flow(flow, store)
     service = build('sheets', 'v4', http=creds.authorize(Http()))
 
+
+
     # Call the Sheets API
 
-    RANGE_NAME = 'Sheet1!I2:L'
+    RANGE_NAME = 'Sheet1!I2:N'
 
     result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                 range=RANGE_NAME).execute()
@@ -55,6 +65,8 @@ def central():
             y = row[1]
             line = int(row[2])
             gameDay = int(row[3])
+            delay = int(row[4])
+            totalCyles = int(row[5])
 
     returned = (calculateVC(x,y))
 
@@ -105,4 +117,4 @@ def central():
         spreadsheetId=SPREADSHEET_ID, range=RANGE_NAME3,
         valueInputOption="RAW", body=body).execute()
     print('{0} cells updated.'.format(result.get('updatedCells')));
-    return
+    return(delay, totalCyles)

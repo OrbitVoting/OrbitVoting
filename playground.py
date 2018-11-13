@@ -1,12 +1,6 @@
-from datetime import datetime
-from pytz import timezone
-import pytz
-
-date_format='%m/%d/%Y %H:%M:%S %Z'
-date = datetime.now(tz=pytz.utc)
+t = "hello'f"
 
 
-date = date.astimezone(timezone('US/Eastern'))
+text = t.encode('utf-8')
 
-print('Local date & time is  :')
-print(date.strftime(date_format))
+print(text)
