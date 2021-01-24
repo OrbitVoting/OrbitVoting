@@ -17,13 +17,13 @@ import json
 
 from playground import getVotecount
 #set active directory to app location
-directory = abspath(getsourcefile(lambda:0))
+"""directory = abspath(getsourcefile(lambda:0))
 newDirectory = directory[:(directory.rfind("\\")+1)]
 os.chdir(newDirectory)
 with open('credentials.json', 'r') as openfile:
     json_object = json.load(openfile)
 TOKEN = json_object["token"]
-
+"""
 
 client = discord.Client()
 
