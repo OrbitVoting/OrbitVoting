@@ -75,4 +75,4 @@ async def on_message(message):
         votecount = getVotecount(page1,page2,URL)
         await channel.send(votecount)
 
-client.run("ODAyODE0OTQwOTg1NTU3MDEy.YA0trQ.HrcMhcp4vZCvXKKOl7KW2johQyg")
+client.run("ODAyODE0OTQwOTg1NTU3MDEy.YA0trQ.hEJSZ9ROxi5Aa6xt_Q2BjxOKsnQ")
