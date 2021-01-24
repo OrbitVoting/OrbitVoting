@@ -1,91 +1,78 @@
-from main import central
-import time
 
+import discord
+import asyncio
+
+from discord.ext import tasks, commands
+
+
+import traceback
+
+#OS/Directory
 import os
 from inspect import getsourcefile
 from os.path import abspath
 
-kill = True
-#Find the curent file location/chdir to current location
+#json read/write
+import json
+
+from playground import getVotecount
+#set active directory to app location
 directory = abspath(getsourcefile(lambda:0))
 newDirectory = directory[:(directory.rfind("\\")+1)]
 os.chdir(newDirectory)
-
-def setSettings():
-    print("Let's get the settings ready so you can run a votecount.")
-    print("")
-    SPREADSHEET_ID = input(("Enter the google spreadsheet ID: (ex.1VXNu_zrOsuoRPmF72ldW_A17xlu3r3XyFaRsLd_O8HY)"))
-    print("")
-    pageURL = input("Enter the page URL, minus the page number at the end: (ex. hypixel.net/forums/stuff/page-)")
-    print("")
-    print("If something fails, it was probably because you didn't enter these values correctly.")
-    return(SPREADSHEET_ID, pageURL)
+with open('credentials.json', 'r') as openfile:
+    json_object = json.load(openfile)
+TOKEN = json_object["token"]
 
 
-print("Welcome to the Votecount bot (beta v.0.2), created and maintained by Mark. If you find any bugs, tell me immediately and a fix will be deployed. Terms of use (Which Google requires me to have) can be found at orbitvoting.github.io")
-print("")
-print("")
+client = discord.Client()
+
+LIST_OF_CHANNELS = []
+# URL = "blank"
 
 
-file = open("settings.txt", "r")
-
-settings = file.readline()
-file.close()
-
-if(settings == "empty\n"):
-
-    settings = setSettings()
-    pageURL = settings[0]
-    SPREADSHEET_ID = settings[1]
-
-    file = open("settings.txt", "w")
-
-    file.write("full!\n" + pageURL + "\n" + SPREADSHEET_ID)
-
-    file.close()
-
-while(kill):
-    print("What do you want to do?")
-    print("a) Change the settings")
-    print("b) Run a votecount")
-    print("c) logout of Google Account")
-    print("d) Quit program")
-
-    choicecheck = True
-    while(choicecheck == True):
-        choice = input("Action: (a/b/c)")
-        choice = choice.lower()
-        if(choice != "a" and choice != "b" and choice != "c" and choice != "d"):
-            print("Invalid!")
-
-        else:
-            choicecheck = False
-
-    if(choice == "a"):
-        setSettings()
-
-    if(choice == "b"):
-        totalCyles = 5
-        cycle = 0
-        print('Starting cycle.')
-
-        while(cycle < totalCyles):
-
-            print("Starting VC!")
-            returnValues = central()
-
-            delay = (returnValues[0])
-            totalCyles = (returnValues[1])
-            cycle = cycle+1
-            print("Done process. Sleeping " + str(delay) + " hours. Completed " + str(cycle) + " cyles out of " + str(totalCyles))
-            time.sleep(delay*3600)
+@client.event
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+    #await channel.send("Hello!")
 
 
 
-        print("Done cycle!")
+@client.event
+async def on_message(message):
 
-    if(choice == "c"):
-        os.remove("token.json")
+    if message.content == "$terminate":
+        channel = message.channel
+        await channel.send("Loging out!")
+        print("logout")
+        await client.logout()
 
-    if(choice == "d"):
-        kill = False
+    elif message.content == "$votecount help" and message.channel.name == "botcommands":
+        await message.channel.send("$votecount help: Print this help message \n $votecount url <url>: set which game you want a votecount for \n$votecount <first page> <last page>: generate vc")
+
+    elif message.content.find("$votecount url") == 0 and message.channel.name == "botcommands":
+        global URL
+        URL = message.content[message.content.find("hypixel"):]
+        channel = message.channel
+        await channel.send("Set URL to https://" + URL)
+    elif message.content == "$votecount printURL":
+        await message.channel.send("URL: " + URL)
+
+    elif message.content.find("$votecount ") == 0 and message.channel.name == "botcommands":
+        channel = message.channel
+        text = message.content
+        p1 = text[text.find(' ')+1:text.rfind(' ')]
+        text = text.replace(p1, '')
+        p2 = text[text.find(' ')+2:]
+
+        page1 = int(p1)
+        page2 = int(p2)
+        await channel.send("Votecount incoming. First page: " + p1 + ". Last Page: " + p2 + ". ETA: " + str((page2-page1)*2) + " seconds.")
+        await channel.send("URL: " + URL)
+        votecount = getVotecount(page1,page2,URL)
+        await channel.send(votecount)
+
+client.run("ODAyODE0OTQwOTg1NTU3MDEy.YA0trQ.HrcMhcp4vZCvXKKOl7KW2johQyg")
