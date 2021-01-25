@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import time
 def getVotecount(page1, page2, URL):
-    URL = "https://hypixel.net/threads/hypixel-mafia-halloween-in-january-night-2.3770594/"
+    masterURL = "https://hypixel.net/threads/hypixel-mafia-halloween-in-january-night-2.3770594/"
     votecount = {}
     i = page1
     #URL = URL[:URL.rfind('/')]
@@ -14,7 +14,7 @@ def getVotecount(page1, page2, URL):
         page = requests.get(URL)
 
         soup = BeautifulSoup(page.content, 'html.parser')
-
+        print(soup)
         for message in soup.find_all("article", class_='message'):
             for quote in (message.find_all("blockquote")):
                 quote.clear()
