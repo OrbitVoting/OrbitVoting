@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import time
 def getVotecount(page1, page2, URL):
+    URL = "https://hypixel.net/threads/hypixel-mafia-halloween-in-january-night-2.3770594/"
     votecount = {}
     i = page1
     #URL = URL[:URL.rfind('/')]
@@ -61,4 +62,4 @@ def getVotecount(page1, page2, URL):
     print(format)
 
     return(format)
-#getVotecount(111,189,"https://hypixel.net/threads/hypixel-mafia-halloween-in-january-night-2.3770594/")
+#getVotecount(111,112,"https://hypixel.net/threads/hypixel-mafia-halloween-in-january-night-2.3770594/")
