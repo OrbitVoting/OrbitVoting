@@ -7,6 +7,7 @@ cachetools==4.2.0
 certifi==2020.6.20
 chardet==3.0.4
 click==7.1.2
+cloudscraper==1.2.52
 cycler==0.10.0
 discord==1.0.1
 discord.py==1.6.0

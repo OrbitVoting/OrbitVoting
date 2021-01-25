@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import cloudscraper
 import time
 def getVotecount(page1, page2, URL):
     masterURL = "https://hypixel.net/threads/hypixel-mafia-halloween-in-january-night-2.3770594/"
@@ -11,9 +12,10 @@ def getVotecount(page1, page2, URL):
     while(i <= page2):
         print(i)
         URL = masterURL + str(i)
-        page = requests.get(URL)
-
-        soup = BeautifulSoup(page.content, 'html.parser')
+        #page = requests.get(URL)
+        scraper = cloudscraper.create_scraper()
+        response = scraper.get(URL).text
+        soup = BeautifulSoup(response, 'html.parser')
         print(soup)
         for message in soup.find_all("article", class_='message'):
             for quote in (message.find_all("blockquote")):
