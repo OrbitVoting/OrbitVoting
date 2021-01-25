@@ -20,7 +20,7 @@ def getVotecount(page1, page2, URL):
             voter = ((message.find(class_='username')).contents)[0]
             text = (message.find(class_='bbWrapper')).get_text()
             text = text.lower()
-            #print(text)
+            print(text)
 
 
             tag1 = text.rfind("[vote]")
