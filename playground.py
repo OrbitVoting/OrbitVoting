@@ -61,4 +61,4 @@ def getVotecount(page1, page2, URL):
     print(format)
 
     return(format)
-getVotecount(111,189,"https://hypixel.net/threads/hypixel-mafia-halloween-in-january-night-2.3770594/")
+#getVotecount(111,189,"https://hypixel.net/threads/hypixel-mafia-halloween-in-january-night-2.3770594/")
