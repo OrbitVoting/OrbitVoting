@@ -3,3 +3,4 @@ chromedriver.exe
 token.json
 __pycache__
 .ipynb_checkpoints
+chromedriver.exe
