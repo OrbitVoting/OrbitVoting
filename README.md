@@ -1,4 +1,4 @@
-# OrbitVoting Votecount Bot
+# Votecount Bot
 A votecount bot created by Mark
 
 ## Overview
