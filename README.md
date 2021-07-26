@@ -1,13 +1,13 @@
 # OrbitVoting Votecount Bot
 A votecount bot created by Mark
 
-#Overview
+## Overview
 This is a simple discord bot that:
    - generates votecounts on demand
    - automatically generates votecounts every time interval and posts them in the #votecounts channel
    - Produces a list of living players and compares it to votecounts to generate a list of players are are not actively voting
    
-#Commands
+## Commands
 Note that, for now, all commands must be entered in the #votecounts channel in a discord server where the bot is added. The bot can process one votecount at a time and does not respond to commands while processing a votecount.
 
 List of commands:
@@ -25,8 +25,12 @@ List of commands:
   Note that the automatic votecounts will stop after 48 hours and will need to be reativated by command.
   - `$votecount auto off` - turns the automatic votecounts off. The bot will automatically trigger this command after 48 hours of continuous automatic votecounts.
   - `$votecount info` - prints the information saved on the server, including recent error messages (Useful for debugging)
-#Mod-specific instructions
+## Mod-specific notes
 - The votecount automatically scrapes the player list. To make this possible, you must:
   - have a spoiler titled "living players" that contains the list of players, where each player name is a valid @tag.
   - the living players spoiler must be immediately followed by a spoiler titled "dead players"
 - The bot automatically scrapes the cycle # (Ex. Day 1, Night 4) from the thread title and prints this along with the votecount. If you are sloppy at updating the thread title, it may confuse players when the bot prints a votecount for Day 4 with the title "Day/Night 3 votecount."
+   
+ ## Other notes
+ - Sometimes, the bot doesn't work. Usually, the problem goes away (ex. there was a website glitch). Sometimes, the website's DDoS protection kicks in; in previous times, these go away within a few days. There's a few things I can do to get around them, but not much.
+ - If anyone wants to try to edit/fork/mess around with the code, that's chill - all files are here except for a file titled tokens.json and googleKey.json - these contain API key for the discord bot and the server I'm using to store data. You'll need to generate your own, which is easy.
