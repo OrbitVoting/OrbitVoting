@@ -34,3 +34,7 @@ List of commands:
  ## Other notes
  - Sometimes, the bot doesn't work. Usually, the problem goes away (ex. there was a website glitch). Sometimes, the website's DDoS protection kicks in; in previous times, these go away within a few days. There's a few things I can do to get around them, but not much.
  - If anyone wants to try to edit/fork/mess around with the code, that's chill - all files are here except for a file titled tokens.json and googleKey.json - these contain API key for the discord bot and the server I'm using to store data. You'll need to generate your own, which is easy.
+
+   
+   
+  Written in Python
