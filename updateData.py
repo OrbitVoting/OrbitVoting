@@ -1,15 +1,11 @@
 import time
 import traceback
 import gspread
-from functools import wraps
-from faunadb import query as q
-from faunadb.objects import Ref
-from faunadb.client import FaunaClient
-from faunadb.errors import BadRequest, Unauthorized
 from pbwrap import Pastebin
 import json
 
 import os
+from replit import db
 from inspect import getsourcefile
 from os.path import abspath
 
@@ -44,44 +40,32 @@ def getData(key):
   while(1):
     i=i+1
     if(2**i>64):
-      return 1
+      return "failure"
     try:
-
-     client = FaunaClient(getToken("fauna"))
-
-     values = client.query(
-         q.get(
-             q.ref(q.collection("main"), getToken("fauna_docID"))
-         )
-     )
-     return(values["data"][key])
-
+      if(key == "delay"):
+        return float(db[key])
+      else:
+        return(db[key])
+    except KeyError:
+      print("Database error: could not find value of _" + key + "_. Set value to 0.")
+      updateData(key,"0")
     except: #Likely a rate-limiting error for repl.it database?
       traceback.print_exc()
       time.sleep(2**i)
       print("Exception caught. Will sleep for " + str(2**i) + " seconds and retry.")
 
 def updateData(key, value):
-    client = FaunaClient(getToken("fauna"))
-    docID = getToken("fauna_docID")
-    values = client.query(
-        q.get(
-            q.ref(q.collection("main"), docID)
-        )
-    )
-    values["data"][key] = value
-    client.query(
-            q.update(
-                q.ref(q.collection("main"), docID),
-                values
-            ))
+    if(key=="delay"):
+      db[key] = str(value)
+    else:
+      db[key] = value
     return
 def listData():
   format = ("Stored data:\n")
-  client = FaunaClient(getToken("fauna"))
-  values = client.query(q.get(q.ref(q.collection("main"), getToken("fauna_docID"))))
-  for key in values["data"].keys():
-      format = format + key + ": " + str((values["data"][key]))+"\n"
+
+  for key in db.keys():
+        format = format + key + ": " + str(db[key]) + "\n"
+
   return format
 
 def logData(firstPage,lastPage,ETA,ATA):
@@ -100,4 +84,8 @@ def logData(firstPage,lastPage,ETA,ATA):
     worksheet.update('B'+str(i),ETA)
     worksheet.update('C'+str(i),ATA)
     return
-print(listData())
+def clearErrors():
+  for key in db.keys():
+    if(key.find("Error")==0):
+      del db[key]
+  return
