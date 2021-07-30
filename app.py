@@ -33,7 +33,8 @@ helpPage = """
         **Visibility:**\n
         `$votecount vis on` - Sets the <#{channel_id}> visibility to on, allowing all members to view votecounts\n
         `$votecount vis off` - Turns the channel visibility to off, restricting access to a select few.\n
-        \nAll commands must be entered in <#{channel_id}>, which is restricted to the host.\n\n[See this doc](https://github.com/HyperbolicStudios/OrbitVoting#readme) for a more extensive command guide, troubleshooting help, and moderator info. Dm me (Mark) if you need anything.
+        **Important notes:**\n
+        All commands must be entered in <#{channel_id}>, which is restricted to the host.\n\n[See this doc](https://github.com/HyperbolicStudios/OrbitVoting#readme) for a more extensive command guide, troubleshooting help, and moderator info. Dm me (Mark) if you need anything.
         """
 client = discord.Client()
 channel_name = "votecount-game-" + getToken("name")[0].lower()
