@@ -19,14 +19,21 @@ TOKEN = getToken("discord")
 LIST_OF_CHANNELS = []
 
 helpPage = """
-        $votecount help - prints this help message.\n
-        $votecount info - prints status info about the bot \n
-        $votecount url <url> - sets the url of the current game.\n
-        $votecount host <host name> - sets the host name, whose vote will not count. (So they can post example vote tags without it being counted)\n
-        $votecount auto on <first page> - turns on the automatic votecounts, which will start at page <first page> and end at the end of the thread.\n
-        $votecount auto off - turns off the automatic votecounts.
-        $votecount auto delay <minutes>- sets the time in minutes between automatic votecounts\n
-        $votecount <first page> <last page> - manually create a votecount, going from <first page> to <last page>. <last page> can be greater than the number of pages in the thread; the bot will automatically stop at the last post. *Note that the first page may include some votes from the previous day! The bot can't tell where on the page the current day started.* \n\nAll commands must be entered in #votecounts, which is restricted to the host.\n\n[doc](https://github.com/HyperbolicStudios/OrbitVoting#readme) for a more extensive command guide and moderator info. Dm me (Mark) if you need anything.
+**Assistance**:\n
+        `$votecount help` - prints this help message.\n
+       `$votecount info` - prints status info about the bot \n
+       **Votecount configuration:**\n
+        `$votecount url <url>` - sets the url of the current game.\n
+        `$votecount host <host name>` - sets the host name, whose vote will not count. (So they can post example vote tags without it being counted) *This field is case sensitive.*\n
+        **Generating votecounts:**\n
+        `$votecount auto on <first page>` - turns on the automatic votecounts, which will start at page <first page> and end at the end of the thread.\n
+        `$votecount auto off` - turns off the automatic votecounts.
+        `$votecount auto delay <minutes>` - sets the time in minutes between automatic votecounts\n
+        `$votecount <first page> <last page>` - manually create a votecount, going from <first page> to <last page>. <last page> can be greater than the number of pages in the thread; the bot will automatically stop at the last post. *Note that the first page may include some votes from the previous day! The bot can't tell where on the page the current day started.* \n
+        **Visibility:**\n
+        `$votecount vis on` - Sets the <#{channel_id}> visibility to on, allowing all members to view votecounts\n
+        `$votecount vis off` - Turns the channel visibility to off, restricting access to a select few.\n
+        \nAll commands must be entered in <#{channel_id}>, which is restricted to the host.\n\n[See this doc](https://github.com/HyperbolicStudios/OrbitVoting#readme) for a more extensive command guide, troubleshooting help, and moderator info. Dm me (Mark) if you need anything.
         """
 client = discord.Client()
 channel_name = "votecount-game-" + getToken("name")[0].lower()
@@ -51,6 +58,16 @@ async def updateStatus(status):
     game = discord.Game(status)
     await client.change_presence(status=discord.Status.online, activity=game)
 
+async def sendHelpMessage(message):
+    embed = discord.Embed()
+    embed.color = 0x46848c
+    channel_id = "#votecounts"
+    for channel in message.guild.channels:
+      if(channel.name == "votecount-game-"+getToken("name")[0].lower()):
+        channel_id = str(channel.id)
+    embed.description = helpPage.format(channel_id = channel_id)
+    await message.channel.send("**Votecount Bot " + getToken("name") + " help:**")
+    await message.channel.send(embed=embed)
 
 async def checkForData():
     await client.wait_until_ready()
@@ -100,7 +117,7 @@ async def on_ready():
 async def on_message(message):
     #print(message.channel.id)
     #print(message.channel.id in LIST_OF_CHANNELS)
-    if ((message.channel.id in LIST_OF_CHANNELS) == False):
+    if ((message.channel.id in LIST_OF_CHANNELS) == False and getToken("name").lower() == "alpha"):
         if message.content == "$votecount help":
             await message.channel.send(helpPage)
 
@@ -141,8 +158,7 @@ async def on_message(message):
                     "Error. I might not have the right permissions; double-check OAuth2."
                 )
         elif message.content == "$votecount ping":
-            await message.channel.send("Hello <@&843279495884701707>")
-            #hereRole = msg.channel.server.roles.get('Moderator', 'here')
+          await message.channel.send("I'm still here!")
 
         elif message.content == "$terminate1":
             channel = message.channel
@@ -151,7 +167,7 @@ async def on_message(message):
             await client.close()
 
         elif message.content == "$votecount help":
-            await message.channel.send(helpPage)
+            await sendHelpMessage(message)
 
         elif message.content.find("$votecount auto on") == 0:
             updateData("last_time", datetime.datetime.now().isoformat())
