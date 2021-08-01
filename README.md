@@ -1,5 +1,6 @@
 # Votecount Bot
-A votecount bot created by Mark
+A votecount bot created by Mark.
+
 
 ## Overview
 This is a simple discord bot that:
