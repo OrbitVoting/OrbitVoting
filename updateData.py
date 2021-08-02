@@ -47,6 +47,9 @@ def getData(key):
       else:
         return(db[key])
     except KeyError:
+      if key == "list_of_aliases":
+        db[key] = {}
+        return db[key]
       print("Database error: could not find value of _" + key + "_. Set value to 0.")
       updateData(key,"0")
     except: #Likely a rate-limiting error for repl.it database?

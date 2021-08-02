@@ -13,6 +13,7 @@ def getVotecount(page1, page2, URL):
     #masterURL = "https://hypixel.net/threads/hypixel-mafia-halloween-in-january-town-win-game-xlviii.3770594/"
     oldTag = ""
     votecount = {}
+    list_of_aliases = getData("list_of_aliases")
         #get list of alive voters:
     scraper = cloudscraper.create_scraper()
     response = scraper.get(URL).text
@@ -104,7 +105,11 @@ def getVotecount(page1, page2, URL):
             if (tag2 > tag1 and tag2 != -1 and tag1 != -1) and voter.lower() != hostname:
                 print("Found vote: ")
             #    print(text)
-                target = (text[tag1+6:tag2])
+                target = (text[tag1+6:tag2]).strip()
+
+                #CHECK FOR ALIASES 
+                if(target.lower() in list_of_aliases.keys()):
+                  target = list_of_aliases[target.lower()]
                 votecount.update({voter:target.replace(" ", '')})
                 #print(text)
 

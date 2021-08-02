@@ -215,6 +215,27 @@ async def on_message(message):
 
         elif message.content.find("$votecount announce") == 0:
             await update(message.content[20:])
+        elif message.content == "$votecount alias wipe":
+          updateData("list_of_aliases",{})
+          await message.channel.send("All aliases deleted.")
+        elif message.content.find("$votecount alias delete ") == 0:
+          alias = message.content[message.content.find("delete")+7:].strip()
+          list_of_aliases = getData("list_of_aliases")
+          list_of_aliases = list_of_aliases.pop(alias)
+          await message.channel.send("Deleted alias " + alias +".")
+        #alias command format: $votecount alias->playername
+        elif message.content.find("$votecount alias") == 0 and message.content.find("->") != -1:
+          text = message.content.strip()
+          alias = text[text.find("alias")+6:text.find("->")].strip().lower()
+          playername = text[text.find("->")+2:].strip().lower()
+          list_of_aliases = getData("list_of_aliases")
+
+          #storage format is alias:playername
+
+          list_of_aliases.update({alias:playername})
+          updateData("list_of_aliases",list_of_aliases)
+          await message.channel.send("Set alias: "+alias+" is an alias of " + playername)
+        
         elif message.content.find("$votecount host") == 0:
             hostname = message.content[16:]
             updateData("hostname", hostname)
